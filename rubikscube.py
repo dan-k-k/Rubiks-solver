@@ -31,8 +31,8 @@ class RubiksCube:
     def is_solved(self):
         """Checks if the cube is in the solved state."""
         for face_idx in range(6):
-            center_color = self.state[face_idx, 1, 1]
-            if not np.all(self.state[face_idx] == center_color):
+            centre_colour = self.state[face_idx, 1, 1]
+            if not np.all(self.state[face_idx] == centre_colour):
                 return False
         return True
 
@@ -165,10 +165,10 @@ class RubiksCube:
 
     def __str__(self):
         """Provides a string representation for printing the cube state."""
-        # The color mapping here is for display only.
-        color_map = {0: 'W', 1: 'Y', 2: 'B', 3: 'G', 4: 'R', 5: 'O', -1: ' '}
+        # The colour mapping here is for display only.
+        colour_map = {0: 'W', 1: 'Y', 2: 'B', 3: 'G', 4: 'R', 5: 'O', -1: ' '}
         def face_to_str(face_idx):
-            return [" ".join(color_map[c] for c in row) for row in self.state[face_idx]]
+            return [" ".join(colour_map[c] for c in row) for row in self.state[face_idx]]
 
         output = []
         up_face, down_face = face_to_str(self.U), face_to_str(self.D)

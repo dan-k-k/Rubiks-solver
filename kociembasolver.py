@@ -6,7 +6,7 @@ from rubikscube import RubiksCube
 def solve_with_kociemba(cube_obj):
     
     # Kociemba requires a fixed mapping: U, R, F, D, L, B
-    center_pieces = {
+    centre_pieces = {
         cube_obj.state[cube_obj.U, 1, 1]: 'U',
         cube_obj.state[cube_obj.R, 1, 1]: 'R',
         cube_obj.state[cube_obj.F, 1, 1]: 'F',
@@ -21,10 +21,10 @@ def solve_with_kociemba(cube_obj):
         for face_idx in face_order:
             for row in range(3):
                 for col in range(3):
-                    color_code = cube_obj.state[face_idx, row, col]
-                    kociemba_str += center_pieces[color_code]
+                    colour_code = cube_obj.state[face_idx, row, col]
+                    kociemba_str += centre_pieces[colour_code]
     except KeyError:
-        return "Error: Could not map cube colors. Ensure cube state is valid."
+        return "Error: Could not map cube colours. Ensure cube state is valid."
 
     try:
         solution = kociemba.solve(kociemba_str)

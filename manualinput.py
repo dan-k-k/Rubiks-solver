@@ -7,8 +7,8 @@ import readchar
 from rubikscube import RubiksCube
 
 # Constants for Readability and Configuration
-COLOR_MAP = {'w': 0, 'y': 1, 'b': 2, 'g': 3, 'o': 5, 'r': 4} # Note: Orange=5(Right of blue), Red=4(Left of blue)
-DISPLAY_MAP = {v: k.upper() for k, v in COLOR_MAP.items()}
+COLOUR_MAP = {'w': 0, 'y': 1, 'b': 2, 'g': 3, 'o': 5, 'r': 4} # Note: Orange=5(Right of blue), Red=4(Left of blue)
+DISPLAY_MAP = {v: k.upper() for k, v in COLOUR_MAP.items()}
 KEY_TO_FACE_MAP = {
     'w': RubiksCube.U, 'y': RubiksCube.D, 'b': RubiksCube.F,
     'g': RubiksCube.B, 'o': RubiksCube.R, 'r': RubiksCube.L # Note: O->R, R->L
@@ -27,25 +27,25 @@ FACE_ORDER = [
 FACE_DETAILS_MAP = {f[0]: f for f in FACE_ORDER}
 
 
-VALID_COLOR_KEYS = set(COLOR_MAP.keys())
+VALID_COLOUR_KEYS = set(COLOUR_MAP.keys())
 BACKSPACE_KEYS = {'\x08', '\x7f'}
 
 def _clear_screen():
     """Clears the terminal screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def _display_face_grid(face_name, instruction, entered_colors):
+def _display_face_grid(face_name, instruction, entered_colours):
     """Displays the current state of the face being entered with instructions."""
     _clear_screen()
     print("--- Rubik's Cube Guided Input ---")
     print("\nIMPORTANT: Always return to the 'home' position before each new face.")
-    print("Home Position: WHITE center on top, BLUE center facing you.")
+    print("Home Position: WHITE centre on top, BLUE centre facing you.")
     print("-" * 60)
     print(f"Instruction: {instruction}")
-    print(f"\nEnter the 9 colors for the {face_name} face from top-left to bottom-right.")
+    print(f"\nEnter the 9 colours for the {face_name} face from top-left to bottom-right.")
     print("Press [Backspace] to undo.\n")
 
-    grid = [DISPLAY_MAP.get(c, '.') for c in entered_colors]
+    grid = [DISPLAY_MAP.get(c, '.') for c in entered_colours]
     grid += ['.'] * (9 - len(grid))
 
     print(f"    {grid[0]} {grid[1]} {grid[2]}")
@@ -53,11 +53,11 @@ def _display_face_grid(face_name, instruction, entered_colors):
     print(f"    {grid[6]} {grid[7]} {grid[8]}")
     print("\nPress Ctrl+C to exit.")
 
-def _display_full_cube_for_confirmation(face_colors_map):
+def _display_full_cube_for_confirmation(face_colours_map):
     """Displays the full, unfolded cube state for user confirmation with labels."""
     def get_face_str(face_int):
-        colors = face_colors_map.get(face_int, [])
-        grid = [DISPLAY_MAP.get(c, '.') for c in colors]
+        colours = face_colours_map.get(face_int, [])
+        grid = [DISPLAY_MAP.get(c, '.') for c in colours]
         grid += ['.'] * (9 - len(grid))
         return [f"{grid[0]} {grid[1]} {grid[2]}", f"{grid[3]} {grid[4]} {grid[5]}", f"{grid[6]} {grid[7]} {grid[8]}"]
 
@@ -95,27 +95,27 @@ def _wait_for_any_key():
         print("\nExiting.")
         sys.exit(0)
 
-def _validate_centers(face_colors_map):
-    """Checks if the entered center pieces are valid."""
-    if len(face_colors_map) != 6:
+def _validate_centres(face_colours_map):
+    """Checks if the entered centre pieces are valid."""
+    if len(face_colours_map) != 6:
         return "Input Error: Not all 6 faces were entered."
 
-    centers = [colors[4] for face, colors in sorted(face_colors_map.items())]
+    centres = [colours[4] for face, colours in sorted(face_colours_map.items())]
     
-    if set(centers) != set(COLOR_MAP.values()):
-        center_counts = {c: centers.count(c) for c in centers}
+    if set(centres) != set(COLOUR_MAP.values()):
+        centre_counts = {c: centres.count(c) for c in centres}
         error_messages = []
-        expected_colors = {val: key.upper() for key, val in COLOR_MAP.items()}
+        expected_colours = {val: key.upper() for key, val in COLOUR_MAP.items()}
         
-        for color_val, count in center_counts.items():
+        for colour_val, count in centre_counts.items():
             if count > 1:
-                error_messages.append(f"{count} '{expected_colors[color_val]}' centers")
+                error_messages.append(f"{count} '{expected_colours[colour_val]}' centres")
         
-        missing_colors = set(COLOR_MAP.values()) - set(centers)
-        for color_val in missing_colors:
-            error_messages.append(f"no '{expected_colors[color_val]}' center")
+        missing_colours = set(COLOUR_MAP.values()) - set(centres)
+        for colour_val in missing_colours:
+            error_messages.append(f"no '{expected_colours[colour_val]}' centre")
             
-        return f"Input Error: Invalid centers ({', '.join(error_messages)}). Please edit the faces."
+        return f"Input Error: Invalid centres ({', '.join(error_messages)}). Please edit the faces."
     return None # Validation passed
 
 def get_cube_from_manual_input():
@@ -123,12 +123,12 @@ def get_cube_from_manual_input():
     _clear_screen()
     print("--- Welcome to the Rubik's Cube Solver ---")
     print("\nPlease hold your physical cube so that:")
-    print("  - The WHITE center is on the TOP face.")
-    print("  - The BLUE center is on the FRONT face (facing you).")
+    print("  - The WHITE centre is on the TOP face.")
+    print("  - The BLUE centre is on the FRONT face (facing you).")
     print("\nThis is your 'home' orientation. Press any key to begin...")
     _wait_for_any_key()
     
-    face_colors = {}
+    face_colours = {}
     faces_to_enter = [f[0] for f in FACE_ORDER]
 
     while True: # Main loop for confirmation and editing
@@ -138,7 +138,7 @@ def get_cube_from_manual_input():
             face_int = faces_to_enter[current_face_list_idx]
             _, face_name, instruction = FACE_DETAILS_MAP[face_int]
 
-            current_entries = face_colors.get(face_int, [])
+            current_entries = face_colours.get(face_int, [])
             
             input_complete_for_face = False
             while not input_complete_for_face:
@@ -148,9 +148,9 @@ def get_cube_from_manual_input():
                     if key == readchar.key.CTRL_C: sys.exit("\nExiting.")
                 except KeyboardInterrupt: sys.exit("\nExiting.")
 
-                if key in VALID_COLOR_KEYS:
+                if key in VALID_COLOUR_KEYS:
                     if len(current_entries) < 9:
-                        current_entries.append(COLOR_MAP[key])
+                        current_entries.append(COLOUR_MAP[key])
                 elif key in BACKSPACE_KEYS:
                     if current_entries:
                         current_entries.pop()
@@ -162,30 +162,30 @@ def get_cube_from_manual_input():
                 if len(current_entries) == 9:
                     input_complete_for_face = True
 
-            face_colors[face_int] = current_entries
+            face_colours[face_int] = current_entries
             
             if input_complete_for_face:
                 current_face_list_idx += 1
         
         # Confirmation step
-        _display_full_cube_for_confirmation(face_colors)
+        _display_full_cube_for_confirmation(face_colours)
         print("\nIs this correct? (y)es / (e)dit a face")
         
         while True:
             action = readchar.readkey().lower()
             if action == 'y':
-                validation_error = _validate_centers(face_colors)
+                validation_error = _validate_centres(face_colours)
                 if validation_error:
                     print(f"\n{validation_error}")
                     print("You will be returned to the edit screen. Press any key.")
                     _wait_for_any_key()
-                    _display_full_cube_for_confirmation(face_colors)
+                    _display_full_cube_for_confirmation(face_colours)
                     print("\nIs this correct? (y)es / (e)dit a face")
                     continue
 
                 final_state = np.zeros((6, 3, 3), dtype=int)
-                for face_int, colors in face_colors.items():
-                    final_state[face_int] = np.array(colors).reshape(3, 3)
+                for face_int, colours in face_colours.items():
+                    final_state[face_int] = np.array(colours).reshape(3, 3)
                 print("\n--- All 6 faces have been entered. ---")
                 return RubiksCube(state=final_state)
             
@@ -198,7 +198,7 @@ def get_cube_from_manual_input():
                 else:
                     print("Invalid face key. Press any key to try again.")
                     _wait_for_any_key()
-                    _display_full_cube_for_confirmation(face_colors)
+                    _display_full_cube_for_confirmation(face_colours)
                     print("\nIs this correct? (y)es / (e)dit a face")
             else:
                 print("Invalid input. Please press 'y' or 'e'.")
