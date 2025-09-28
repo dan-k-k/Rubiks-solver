@@ -1,11 +1,12 @@
 # main.py
 
 from manualinput import get_cube_from_manual_input
+from camerainput import get_cube_from_camera
 from kociembasolver import solve_with_kociemba
 import sys
 
 def display_solution_with_cube_state(solution_str, cube):
-    """Splits the solution string and displays it move by move."""
+    """Split the solution string and display it move by move."""
     moves = solution_str.split()
     total_moves = len(moves)
     
@@ -14,6 +15,7 @@ def display_solution_with_cube_state(solution_str, cube):
         return
 
     print("The cube state will be updated after each move.")
+    print("Keep BLUE facing you, with WHITE on TOP.")
     print("Press [Enter] to see the next move, or type 'q' to quit.\n")
 
     for i, move in enumerate(moves):
@@ -24,40 +26,53 @@ def display_solution_with_cube_state(solution_str, cube):
         print("-" * 40)
         
         if i < total_moves - 1:
-            user_input = input("Press Enter for next move...")
+            user_input = input("Press Enter for the next move...")
             if user_input.lower() == 'q':
                 print("\nExiting solution steps.")
                 return
 
-    print("\n\n--- Solved! ---")
+    print("\n\nSolved!")
 
 
 def main():
     """The main function for the text-based Rubik's Cube solver application."""
-    try:
-        # Step 1: Get the scrambled cube state from the user.
-        scrambled_cube = get_cube_from_manual_input()
+    scrambled_cube = None
+    
+    while True:
+        choice = input("Choose input method:\n1. Manual Text Input\n2. Webcam Scanner\nEnter choice (1 or 2): ")
+        if choice == '1':
+            scrambled_cube = get_cube_from_manual_input()
+            break
+        elif choice == '2':
+            print("\nStarting webcam scanner...")
+            scrambled_cube = get_cube_from_camera()
+            break
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+            
+    if scrambled_cube is None:
+        print("\nCould not get cube state. Exiting.")
+        return
 
+    try:
         print("\nCube state received. Here is the cube you entered:")
         print(scrambled_cube)
 
-        # Step 2: Solve the cube.
         print("\n" + "="*40)
         print("Attempting to solve the cube...")
         solution = solve_with_kociemba(scrambled_cube)
 
-        # Step 3: Display the result.
         print("="*40 + "\n")
         if "Error" in solution:
-            print("--- An Error Occurred ---")
+            print("An Error Occurred")
             print(solution)
             print("\nPlease ensure all 54 stickers were entered correctly and form a valid cube.")
         else:
-            print("--- Solution Found! ---")
+            print("Solution Found!")
             display_solution_with_cube_state(solution, scrambled_cube)
 
     except (KeyboardInterrupt, SystemExit):
-        # Handle the case where the user exits during input (e.g., Ctrl+C)
+        # Ctrl+C
         print("\nApplication exited.")
     except Exception as e:
         print(f"\nAn unexpected error occurred: {e}")

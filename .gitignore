@@ -1,0 +1,18 @@
+# Python bytecode and cache
+__pycache__/
+*.pyc
+
+# Virtual Environment
+# Ignores any folder named .venv or venv
+.venv/
+venv/
+
+# Datasets
+# These are too large and not part of the source code.
+# Provide instructions in your README on how to acquire them.
+dataset/
+test_dataset/
+
+# IDE specific files
+.vscode/
+.idea/

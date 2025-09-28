@@ -1,4 +1,4 @@
-# rubikscubetest.py
+# _rubikscubetest.py
 
 import unittest
 import numpy as np
@@ -122,6 +122,6 @@ class TestRubiksCube(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # This allows the test suite to be run directly from the command line
+    # Run directly from the command line
     unittest.main(verbosity=2)
 

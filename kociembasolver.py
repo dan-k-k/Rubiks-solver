@@ -34,7 +34,7 @@ def solve_with_kociemba(cube_obj):
 
 
 if __name__ == "__main__":
-    # Create a new cube and shuffle it
+    # New cube, shuffled
     scrambled_cube = RubiksCube()
     print("Scrambled Cube State")
     scrambled_cube.shuffle(30)
@@ -46,13 +46,13 @@ if __name__ == "__main__":
     print(f"Solution Found: {solution_moves}")
     
     if "Error" not in solution_moves:
-        # Apply the solution to our cube object to verify
+
         print("\nApplying solution to scrambled cube...")
         scrambled_cube.move(solution_moves)
         print(scrambled_cube)
         print(f"\nIs the cube solved after applying the solution? {scrambled_cube.is_solved()}")
 
-    # --- Test with an invalid cube ---
+    # Test with an invalid cube
     print("\n" + "-"*40)
     print("\nTesting with a known unsolvable cube (flipped edge)")
     unsolvable_cube = RubiksCube()

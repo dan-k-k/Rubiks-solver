@@ -6,7 +6,6 @@ import numpy as np
 import readchar
 from rubikscube import RubiksCube
 
-# Constants for Readability and Configuration
 COLOUR_MAP = {'w': 0, 'y': 1, 'b': 2, 'g': 3, 'o': 5, 'r': 4} # Note: Orange=5(Right of blue), Red=4(Left of blue)
 DISPLAY_MAP = {v: k.upper() for k, v in COLOUR_MAP.items()}
 KEY_TO_FACE_MAP = {
@@ -14,7 +13,7 @@ KEY_TO_FACE_MAP = {
     'g': RubiksCube.B, 'o': RubiksCube.R, 'r': RubiksCube.L # Note: O->R, R->L
 }
 
-# Define the order and instructions for face input, matching the user's cube
+# Define the order and instructions
 FACE_ORDER = [
     (RubiksCube.U, "White (Up)", "You are in the 'home' position. The WHITE face is on top."),
     (RubiksCube.D, "Yellow (Down)", "From home, tilt the cube FORWARD TWICE so YELLOW is on top."),
@@ -23,7 +22,6 @@ FACE_ORDER = [
     (RubiksCube.L, "Red (Left)", "From home, bring the LEFT (Red) face to the front."),
     (RubiksCube.R, "Orange (Right)", "From home, bring the RIGHT (Orange) face to the front.")
 ]
-# Create a reverse map from face_int to details for easier lookup
 FACE_DETAILS_MAP = {f[0]: f for f in FACE_ORDER}
 
 
@@ -31,13 +29,12 @@ VALID_COLOUR_KEYS = set(COLOUR_MAP.keys())
 BACKSPACE_KEYS = {'\x08', '\x7f'}
 
 def _clear_screen():
-    """Clears the terminal screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def _display_face_grid(face_name, instruction, entered_colours):
-    """Displays the current state of the face being entered with instructions."""
+    """Display the current state of the face being entered."""
     _clear_screen()
-    print("--- Rubik's Cube Guided Input ---")
+    print("RUBIK's CUBE GUIDED INPUT")
     print("\nIMPORTANT: Always return to the 'home' position before each new face.")
     print("Home Position: WHITE centre on top, BLUE centre facing you.")
     print("-" * 60)
@@ -54,7 +51,7 @@ def _display_face_grid(face_name, instruction, entered_colours):
     print("\nPress Ctrl+C to exit.")
 
 def _display_full_cube_for_confirmation(face_colours_map):
-    """Displays the full, unfolded cube state for user confirmation with labels."""
+    """Display the full, unfolded cube state for user confirmation with labels."""
     def get_face_str(face_int):
         colours = face_colours_map.get(face_int, [])
         grid = [DISPLAY_MAP.get(c, '.') for c in colours]
@@ -69,8 +66,8 @@ def _display_full_cube_for_confirmation(face_colours_map):
     back_face = get_face_str(RubiksCube.B)
 
     _clear_screen()
-    print("--- Review Your Cube ---")
-    print("This shows the cube 'unfolded'. Home is White on top, Blue in front.\n")
+    print("REVIEW YOUR CUBE")
+    print("Unfolded cube; Home is White on top, Blue in front.\n")
 
     # Up Face (White)
     for row in up_face: print("       " + row)
@@ -85,7 +82,7 @@ def _display_full_cube_for_confirmation(face_colours_map):
     for row in down_face: print("       " + row)
 
 def _wait_for_any_key():
-    """Waits for the user to press any key."""
+    """Wait for the user to press any key."""
     try:
         key = readchar.readkey()
         if key == readchar.key.CTRL_C:
@@ -96,7 +93,7 @@ def _wait_for_any_key():
         sys.exit(0)
 
 def _validate_centres(face_colours_map):
-    """Checks if the entered centre pieces are valid."""
+    """Check if the entered centre pieces are valid."""
     if len(face_colours_map) != 6:
         return "Input Error: Not all 6 faces were entered."
 
@@ -119,19 +116,19 @@ def _validate_centres(face_colours_map):
     return None # Validation passed
 
 def get_cube_from_manual_input():
-    """Guides the user through entering the cube's state via single keypresses."""
+    """Guide the user through entering the cube's state via single keypresses."""
     _clear_screen()
-    print("--- Welcome to the Rubik's Cube Solver ---")
-    print("\nPlease hold your physical cube so that:")
+    print("    Welcome to the Rubik's Cube Solver")
+    print("\nHold your cube so that:")
     print("  - The WHITE centre is on the TOP face.")
     print("  - The BLUE centre is on the FRONT face (facing you).")
-    print("\nThis is your 'home' orientation. Press any key to begin...")
+    print("\nThis is your home orientation. Press any key to begin...")
     _wait_for_any_key()
     
     face_colours = {}
     faces_to_enter = [f[0] for f in FACE_ORDER]
 
-    while True: # Main loop for confirmation and editing
+    while True: # Confirmation and editing
         
         current_face_list_idx = 0
         while current_face_list_idx < len(faces_to_enter):
@@ -186,7 +183,7 @@ def get_cube_from_manual_input():
                 final_state = np.zeros((6, 3, 3), dtype=int)
                 for face_int, colours in face_colours.items():
                     final_state[face_int] = np.array(colours).reshape(3, 3)
-                print("\n--- All 6 faces have been entered. ---")
+                print("\n   All 6 faces have been entered.")
                 return RubiksCube(state=final_state)
             
             elif action == 'e':
