@@ -137,7 +137,7 @@ class CubeScannerApp(CameraApp):
 
             # Draw status text based on mode
             if self.mode == 'ALIGN':
-                cv2.putText(display_frame, "Press SPACEBAR to capture", (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+                cv2.putText(display_frame, "Press SPACEBAR to capture; 'q' to quit.", (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
             elif self.mode == 'REVIEW':
                 cv2.putText(display_frame, "ENTER: Accept | 'e': Edit | 'r': Retry", (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
             elif self.mode == 'EDIT':
