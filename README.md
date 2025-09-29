@@ -2,6 +2,7 @@
 
 This project allows you to solve a 3x3 Rubik's Cube using a **self-facing** webcam. A Convolutional Neural Network determines a cube's unsolved state in real-time. The scanned state is then fed into the Kociemba algorithm to output a solution. Completed with OpenCV.
 
+*gif loading...*
 ![Rubik's Cube Solver Demo](images/Rubik_s-example3.gif)
 
 ##### Clone the repository:
