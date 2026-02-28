@@ -13,9 +13,8 @@ KEY_TO_FACE_MAP = {
     'g': RubiksCube.B, 'o': RubiksCube.R, 'r': RubiksCube.L # Note: O->R, R->L
 }
 
-# Define the order and instructions
 FACE_ORDER = [
-    (RubiksCube.U, "White (Up)", "You are in the 'home' position. The WHITE face is on top."),
+    (RubiksCube.U, "White (Up)", "'Home' position. The WHITE face is on top."),
     (RubiksCube.D, "Yellow (Down)", "From home, tilt the cube FORWARD TWICE so YELLOW is on top."),
     (RubiksCube.F, "Blue (Front)", "Return to home. The BLUE face is already facing you."),
     (RubiksCube.B, "Green (Back)", "Return to home, then turn the cube AROUND so GREEN is facing you, keeping WHITE on top."),
@@ -34,10 +33,9 @@ def _clear_screen():
 def _display_face_grid(face_name, instruction, entered_colours):
     """Display the current state of the face being entered."""
     _clear_screen()
-    print("RUBIK's CUBE GUIDED INPUT")
-    print("\nIMPORTANT: Always return to the 'home' position before each new face.")
-    print("Home Position: WHITE centre on top, BLUE centre facing you.")
-    print("-" * 60)
+    print("Guided input")
+    print("\nImportant: always return to the 'home' position before each new face.")
+    print("Home position: WHITE centre on top, BLUE centre facing you.")
     print(f"Instruction: {instruction}")
     print(f"\nEnter the 9 colours for the {face_name} face from top-left to bottom-right.")
     print("Press [Backspace] to undo.\n")
@@ -51,7 +49,7 @@ def _display_face_grid(face_name, instruction, entered_colours):
     print("\nPress Ctrl+C to exit.")
 
 def _display_full_cube_for_confirmation(face_colours_map):
-    """Display the full, unfolded cube state for user confirmation with labels."""
+    """Display the full state for user confirmation."""
     def get_face_str(face_int):
         colours = face_colours_map.get(face_int, [])
         grid = [DISPLAY_MAP.get(c, '.') for c in colours]
@@ -66,7 +64,7 @@ def _display_full_cube_for_confirmation(face_colours_map):
     back_face = get_face_str(RubiksCube.B)
 
     _clear_screen()
-    print("REVIEW YOUR CUBE")
+    print("Review cube")
     print("Unfolded cube; Home is White on top, Blue in front.\n")
 
     # Up Face (White)
@@ -82,7 +80,6 @@ def _display_full_cube_for_confirmation(face_colours_map):
     for row in down_face: print("       " + row)
 
 def _wait_for_any_key():
-    """Wait for the user to press any key."""
     try:
         key = readchar.readkey()
         if key == readchar.key.CTRL_C:
@@ -93,9 +90,9 @@ def _wait_for_any_key():
         sys.exit(0)
 
 def _validate_centres(face_colours_map):
-    """Check if the entered centre pieces are valid."""
+    """Check centre pieces are valid."""
     if len(face_colours_map) != 6:
-        return "Input Error: Not all 6 faces were entered."
+        return "Input Error: not all 6 faces were entered."
 
     centres = [colours[4] for face, colours in sorted(face_colours_map.items())]
     
@@ -112,13 +109,12 @@ def _validate_centres(face_colours_map):
         for colour_val in missing_colours:
             error_messages.append(f"no '{expected_colours[colour_val]}' centre")
             
-        return f"Input Error: Invalid centres ({', '.join(error_messages)}). Please edit the faces."
+        return f"Input Error: invalid centres ({', '.join(error_messages)}). Please edit the faces."
     return None # Validation passed
 
 def get_cube_from_manual_input():
-    """Guide the user through entering the cube's state via single keypresses."""
     _clear_screen()
-    print("    Welcome to the Rubik's Cube Solver")
+    print("Manual input")
     print("\nHold your cube so that:")
     print("  - The WHITE centre is on the TOP face.")
     print("  - The BLUE centre is on the FRONT face (facing you).")
@@ -203,7 +199,7 @@ def get_cube_from_manual_input():
 if __name__ == "__main__":
     try:
         user_cube = get_cube_from_manual_input()
-        print("\nCube state successfully created!")
+        print("\nCube state successfully created.")
         print(user_cube)
     except Exception as e:
         print(f"\nAn error occurred: {e}")

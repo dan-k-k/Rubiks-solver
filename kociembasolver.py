@@ -34,13 +34,11 @@ def solve_with_kociemba(cube_obj):
 
 
 if __name__ == "__main__":
-    # New cube, shuffled
     scrambled_cube = RubiksCube()
-    print("Scrambled Cube State")
+    print("Scrambled cube state")
     scrambled_cube.shuffle(30)
     print(scrambled_cube)
 
-    # Solve the cube
     print("\nSolving the cube...")
     solution_moves = solve_with_kociemba(scrambled_cube)
     print(f"Solution Found: {solution_moves}")
@@ -52,11 +50,10 @@ if __name__ == "__main__":
         print(scrambled_cube)
         print(f"\nIs the cube solved after applying the solution? {scrambled_cube.is_solved()}")
 
-    # Test with an invalid cube
+    # Test invalid cube by flipping a single edge piece
     print("\n" + "-"*40)
     print("\nTesting with a known unsolvable cube (flipped edge)")
     unsolvable_cube = RubiksCube()
-    # Manually flip a single edge piece
     unsolvable_cube.state[unsolvable_cube.U, 0, 1] = unsolvable_cube.state[unsolvable_cube.F, 1, 1]
     unsolvable_cube.state[unsolvable_cube.F, 0, 1] = unsolvable_cube.state[unsolvable_cube.U, 1, 1]
     

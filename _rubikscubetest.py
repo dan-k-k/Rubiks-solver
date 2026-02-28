@@ -7,7 +7,6 @@ from rubikscube import RubiksCube
 class TestRubiksCube(unittest.TestCase):
 
     def setUp(self):
-        """Set up a new solved cube for each test case."""
         self.cube = RubiksCube()
 
     def assertCubeStateEqual(self, cube, expected_state):

@@ -6,7 +6,6 @@ import sys
 from screeninfo import get_monitors
 
 def select_camera():
-    """Cycle through available camera indices and let the user select one."""
     print("Searching for cameras...")
     for i in range(5):
         cap = cv2.VideoCapture(i)
@@ -39,7 +38,6 @@ def select_camera():
     return None, -1
 
 class CameraApp:
-    """Handle boilerplate for camera selection, window creation, and display."""
     def __init__(self, window_name):
         self.window_name = window_name
         

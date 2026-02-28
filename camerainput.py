@@ -8,7 +8,7 @@ from rubikscube import RubiksCube
 from camera_app import CameraApp # base class
 
 class CubeScannerApp(CameraApp):
-    """The application for scanning a Rubik's Cube state with live predictions and freeze-frame review."""
+    """Scanning a Rubik's Cube state with live predictions and freeze-frame review."""
     def __init__(self):
         super().__init__("Rubik's Cube CNN Scanner")
         MODEL_PATH = os.path.join('models', 'best_model.keras')
@@ -35,14 +35,13 @@ class CubeScannerApp(CameraApp):
     
     def _save_current_face(self):
         """Helper function to save the face state and reset the app mode."""
-        if self.captured_predictions is None:
-            return
+        if self.captured_predictions is None: return
             
         centre_colour_name = self.captured_predictions[4]
         centre_colour_int = self.COLOR_TO_INT.get(centre_colour_name)
 
         if centre_colour_int is None:
-            print("Cannot save: Centre colour is unknown.")
+            print("Cannot save: centre colour is unknown.")
             return
 
         if centre_colour_int in self.scanned_faces:
@@ -65,31 +64,27 @@ class CubeScannerApp(CameraApp):
         print("2. Press SPACEBAR to capture and review.")
         print("3. Press ENTER to accept, 'e' to edit, or 'r' to retry.")
 
-        # This will hold the un-annotated frame during alignment
         clean_frame_for_capture = None
 
         while len(self.scanned_faces) < 6:
-            # Frame Acquisition and Prediction
+            # Frame acquisition and prediction
             if self.mode == 'ALIGN':
                 ret, live_frame = self.cap.read()
                 if not ret: break
-                # Store the flipped frame before any drawing happens.
-                clean_frame_for_capture = cv2.flip(live_frame, 1)
+                clean_frame_for_capture = cv2.flip(live_frame, 1) # Store flipped frame
                 display_frame = clean_frame_for_capture.copy()
-            else: # REVIEW or EDIT mode
+            else:           # REVIEW or EDIT
                 display_frame = self.captured_frame.copy()
 
-            # UI Drawing
             sticker_size, gap = 40, 5
             grid_w = (3 * sticker_size) + (2 * gap)
             grid_start_x = (display_frame.shape[1] - grid_w) // 2
             grid_start_y = (display_frame.shape[0] - grid_w) // 2
             
-            # Drawing the predictions
+            # Drawing predictions
             predictions_to_show = None
             if self.mode == 'ALIGN':
-                # Run live predictions on every frame
-                live_predictions = []
+                live_predictions = [] # For every frame
                 for i in range(9):
                     row, col = i // 3, i % 3
                     x1 = grid_start_x + col * (sticker_size + gap)
@@ -100,7 +95,7 @@ class CubeScannerApp(CameraApp):
             else: # REVIEW or EDIT
                 predictions_to_show = self.captured_predictions
 
-            # Draw the grid and predictions on the frame
+            # Grid and live predictions
             for i in range(9):
                 row, col = i // 3, i % 3
                 x1 = grid_start_x + col * (sticker_size + gap)
@@ -114,14 +109,14 @@ class CubeScannerApp(CameraApp):
                 if self.mode == 'EDIT' and i == self.edit_selection_index:
                     cv2.rectangle(display_frame, (x1, y1), (x1 + sticker_size, y1 + sticker_size), (0, 255, 0), 4)
 
-            # Show centre face info and instructions
+            # Centre face info and instructions
             if predictions_to_show:
                 centre_colour_name = predictions_to_show[4]
                 centre_colour_int = self.COLOR_TO_INT.get(centre_colour_name)
                 if centre_colour_int is not None:
                     cv2.putText(display_frame, f"Showing: {self.INT_TO_FACE[centre_colour_int]}", (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 
-                # Add orientation instructions during live alignment
+                # Orientation instructions 
                 if self.mode == 'ALIGN':
                     orientation_text = ""
                     if centre_colour_name == 'white':
@@ -135,7 +130,7 @@ class CubeScannerApp(CameraApp):
                         text_y_pos = display_frame.shape[0] - 80
                         cv2.putText(display_frame, orientation_text, (20, text_y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 255), 2)
 
-            # Draw status text based on mode
+            # Text
             if self.mode == 'ALIGN':
                 cv2.putText(display_frame, "Press SPACEBAR to capture; 'q' to quit.", (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
             elif self.mode == 'REVIEW':
@@ -194,7 +189,7 @@ class CubeScannerApp(CameraApp):
                         self.captured_predictions[self.edit_selection_index] = colour_map[key_char]
                         print(f"Set sticker {self.edit_selection_index+1} to {colour_map[key_char]}")
 
-        # Cleanup and Return
+        # Clean up and return
         self.cleanup()
         if len(self.scanned_faces) == 6:
             print("\nAll 6 faces scanned successfully!")
@@ -207,7 +202,6 @@ class CubeScannerApp(CameraApp):
             return None
 
 def get_cube_from_camera():
-    """Create an instance of the CubeScannerApp and get the cube state."""
     try:
         scanner = CubeScannerApp()
         cube_object = scanner.run()
@@ -217,10 +211,8 @@ def get_cube_from_camera():
         return None
 
 if __name__ == "__main__":
-    # Test the scanner directly
-    print("Running cube scanner in test mode...")
     cube = get_cube_from_camera()
     if cube:
-        print("\nFinal Cube State from test run:")
+        print("\nFinal cube state from test run:")
         print(cube.state)
 

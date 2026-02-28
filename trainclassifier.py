@@ -13,17 +13,16 @@ DATA_DIR = 'dataset'
 MODELS_DIR = 'models'
 IMG_SIZE = (32, 32)
 BATCH_SIZE = 32
-EPOCHS = 30 # Early stopping happens around ep 7
+EPOCHS = 30
 
 if not os.path.exists(MODELS_DIR):
     os.makedirs(MODELS_DIR)
 
-def random_ninety_degree_rotate(image):
-    """Randomly rotates an image by 0, 90, 180, or 270 degrees."""
+def random_ninety_degree_rotate(image): # Random rotation for augmentation of existing dataset
     k = random.choice([0, 1, 2, 3])
     return np.rot90(image, k=k)
 
-# Data Loading and Augmentation
+# Data loading and augmentation
 # Apply random transformations (rotation, zoom, etc.)
 datagen = ImageDataGenerator(
     rescale=1./255,          # Normalize pixel values to 0-1
@@ -56,7 +55,7 @@ validation_generator = datagen.flow_from_directory(
     shuffle=False
 )
 
-# Build the CNN Model
+# CNN model
 model = Sequential([
     Conv2D(32, (3, 3), activation='relu', input_shape=(IMG_SIZE[0], IMG_SIZE[1], 3)),
     MaxPooling2D((2, 2)),
@@ -75,10 +74,8 @@ model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
-# Train the Model
-print("\n--- Starting Training ---")
+print("\nStarting training")
 
-# Save best model automatically during training (used for live predictions)
 checkpoint = ModelCheckpoint(
     filepath=os.path.join(MODELS_DIR, 'best_model.keras'),
     monitor='val_accuracy',
@@ -100,7 +97,7 @@ history = model.fit(
     callbacks=[checkpoint, early_stop]
 )
 
-# Save the Trained Model
+# Save the trained model
 model_path = os.path.join(MODELS_DIR, 'colour_classifierES.h5')
 model.save(model_path)
 print(f"\n--- Training Complete. Model saved to {model_path} ---")

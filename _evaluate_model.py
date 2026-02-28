@@ -14,7 +14,7 @@ TEST_DATA_DIR = 'test_dataset'
 IMG_SIZE = (32, 32)
 BATCH_SIZE = 32
 
-print("Model Evaluation on Test Dataset\n")
+print("Model evaluation on test dataset\n")
 
 # Load the trained model
 print(f"Loading model from {MODEL_PATH}...")
@@ -40,31 +40,24 @@ test_generator = test_datagen.flow_from_directory(
 print(f"Found {test_generator.samples} test images across {test_generator.num_classes} classes.")
 print(f"Class labels: {list(test_generator.class_indices.keys())}")
 
-# Evaluate the model ,.evaluate()
 print("\nEvaluating model on the test set")
 loss, accuracy = model.evaluate(test_generator, verbose=1)
-print(f"\nTest Results:")
-print(f"Test Accuracy: {accuracy * 100:.2f}%")
-print(f"Test Loss: {loss:.4f}")
+print(f"\nTest results:")
+print(f"Test accuracy: {accuracy * 100:.2f}%")
+print(f"Test loss: {loss:.4f}")
 
-# Get detailed predictions for a classification report
 print("\nGenerating classification report")
-# Reset the generator to be sure it's at the beginning
 test_generator.reset()
-# Get predictions
 print("Making predictions...")
 predictions = model.predict(test_generator, steps=int(np.ceil(test_generator.samples/test_generator.batch_size)), verbose=1)
 predicted_classes = np.argmax(predictions, axis=1)
 
-# Get true labels
 true_classes = test_generator.classes
 class_labels = list(test_generator.class_indices.keys())
 
-# Print the detailed classification report
-print("\nClassification Report")
+print("\nClassification report")
 print(classification_report(true_classes, predicted_classes, target_names=class_labels))
 
-# Confusion Matrix
 print("\nGenerating confusion matrix")
 cm = confusion_matrix(true_classes, predicted_classes)
 
@@ -76,15 +69,14 @@ plt.xlabel('Predicted Label')
 plt.tight_layout()
 plt.show()
 
-# Show per-class breakdown
-print("\nPer-Class Image Counts")
+print("\nPer-class image counts")
 for i, class_name in enumerate(class_labels):
     count = np.sum(true_classes == i)
     correct = np.sum((true_classes == i) & (predicted_classes == i))
     print(f"{class_name}: {correct}/{count} correct ({correct/count*100:.1f}%)")
 
 print(f"\nSummary")
-print(f"Overall Test Accuracy: {accuracy * 100:.2f}%")
+print(f"Overall test accuracy: {accuracy * 100:.2f}%")
 if accuracy < 0.8:
     print("Low accuracy (domain shift?). Model needs more diverse training data")
 elif accuracy < 0.9:

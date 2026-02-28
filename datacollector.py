@@ -7,7 +7,7 @@ import uuid
 from camera_app import CameraApp # base class
 
 class DataCollectorApp(CameraApp):
-    """The application for collecting sticker image data."""
+    """Collecting sticker image data."""
     def __init__(self, target_directory):
         self.DATA_DIR = target_directory
         self.IMG_SIZE = (32, 32)
@@ -58,9 +58,8 @@ class DataCollectorApp(CameraApp):
         self.cleanup()
     
     def _capture_and_label_face(self, captured_frame, sticker_size, gap, grid_start_x, grid_start_y):
-        # Flip because of self-facing camera
-        flipped_capture = cv2.flip(captured_frame, 1)
 
+        flipped_capture = cv2.flip(captured_frame, 1) # Flip because of self-facing camera
         face_data_to_save = [None] * 9
         i = 0
         while i < 9:
@@ -68,14 +67,14 @@ class DataCollectorApp(CameraApp):
             
             display_copy = flipped_capture.copy()
             
-            # Re-draw the main grid
+            # Main grid
             for r_draw in range(3):
                 for c_draw in range(3):
                     dx1 = grid_start_x + c_draw * (sticker_size + gap)
                     dy1 = grid_start_y + r_draw * (sticker_size + gap)
                     cv2.rectangle(display_copy, (dx1, dy1), (dx1 + sticker_size, dy1 + sticker_size), (255, 255, 255), 2)
             
-            # Indicators on previously labelled colours
+            # Indicate labelled colours
             corner_size = 15
             for idx, data in enumerate(face_data_to_save):
                 if data is not None:
@@ -85,7 +84,7 @@ class DataCollectorApp(CameraApp):
                     bgr_colour = self.BGR_COLOUR_MAP[data['label']]
                     cv2.rectangle(display_copy, (mem_x1, mem_y1), (mem_x1 + corner_size, mem_y1 + corner_size), bgr_colour, -1)
 
-            # Highlight the CURRENT sticker in green
+            # Highlight the current sticker
             x1 = grid_start_x + col * (sticker_size + gap)
             y1 = grid_start_y + row * (sticker_size + gap)
             cv2.rectangle(display_copy, (x1, y1), (x1 + sticker_size, y1 + sticker_size), (0, 255, 0), 3)
@@ -121,7 +120,7 @@ class DataCollectorApp(CameraApp):
 if __name__ == "__main__":
     target_dir = None
     while True:
-        choice = input("Save images to:\n1. Training Dataset (dataset)\n2. Test Dataset (test_dataset)\nEnter choice (1 or 2): ")
+        choice = input("Save images to:\n1. Training dataset (dataset)\n2. Test dataset (test_dataset)\nEnter choice (1 or 2): ")
         if choice == '1':
             target_dir = 'dataset'
             break

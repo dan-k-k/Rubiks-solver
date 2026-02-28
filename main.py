@@ -6,7 +6,6 @@ from kociembasolver import solve_with_kociemba
 import sys
 
 def display_solution_with_cube_state(solution_str, cube):
-    """Split the solution string and display it move by move."""
     moves = solution_str.split()
     total_moves = len(moves)
     
@@ -58,11 +57,9 @@ def main():
         print("\nCube state received. Here is the cube you entered:")
         print(scrambled_cube)
 
-        print("\n" + "="*40)
         print("Attempting to solve the cube...")
         solution = solve_with_kociemba(scrambled_cube)
 
-        print("="*40 + "\n")
         if "Error" in solution:
             print("An Error Occurred")
             print(solution)
@@ -71,8 +68,7 @@ def main():
             print("Solution Found!")
             display_solution_with_cube_state(solution, scrambled_cube)
 
-    except (KeyboardInterrupt, SystemExit):
-        # Ctrl+C
+    except (KeyboardInterrupt, SystemExit): # Ctrl+C
         print("\nApplication exited.")
     except Exception as e:
         print(f"\nAn unexpected error occurred: {e}")
